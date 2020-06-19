@@ -25,7 +25,7 @@
       </v-container>
       <v-snackbar v-model="error">
         حدث خطأ, تأكد من اتصالك الانترنت
-        <v-btn flat color="error" @click.native="error = false">Close</v-btn>
+        <v-btn text color="error" @click.native="error = false">Close</v-btn>
       </v-snackbar>
     </v-main>
   </v-app>
@@ -85,25 +85,38 @@ export default {
       else if (this.op !== "") this.op = "";
       else this.num1 = this.num1.substring(0, this.num1.length - 1);
     },
-    calc() {
+    async calc() {
       let { num1, op, num2 } = this;
       switch (op) {
+        case "+":
+          op = "sum";
+          break;
+        case "-":
+          op = "sub";
+          break;
         case "×":
-          op = "*";
+          op = "mul";
           break;
         case "÷":
-          op = "/";
+          op = "div";
           break;
       }
       if (this.memory[`${num1} ${op} ${num2}`]) {
         this.result = this.memory[`${num1} ${op} ${num2}`];
       } else {
         this.loading = true;
-        setTimeout(() => {
-          this.result = eval(`${num1} ${op} ${num2}`);
+        try {
+          let resultRes = await fetch(
+            `https://tur-calculator.herokuapp.com/?num1=${num1}&num2=${num2}&op=${op}`
+          );
+          let result = await resultRes.json();
+          this.result = result.result;
           this.memory[`${num1} ${op} ${num2}`] = this.result;
           this.loading = false;
-        }, 3000);
+        } catch {
+          this.loading = false;
+          this.error = true;
+        }
       }
     }
   }
