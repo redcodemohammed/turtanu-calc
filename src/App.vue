@@ -11,7 +11,7 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="10" xl="5" md="5" sm="10" xs="10">
+          <v-col cols="12" xl="6" md="6" sm="12" xs="12">
             <Keyboard
               @changeOp="changeOp"
               @changeNumber="changeNumber"
@@ -24,7 +24,7 @@
         </v-row>
       </v-container>
       <v-snackbar v-model="error">
-        حدث خطأ, تأكد من اتصالك الانترنت
+        Please check your internet connection
         <v-btn text color="error" @click.native="error = false">Close</v-btn>
       </v-snackbar>
     </v-main>
